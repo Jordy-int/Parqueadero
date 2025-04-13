@@ -11,22 +11,19 @@ public class Auto {
     private String placa = " ";
     Tipo tipo;
 
-    public Auto(String placa, Tipo tipo) {
-
-        if (placa.matches("^[A-Z]{3}\\d{3}$")) {
-
-            this.placa = placa;
-            this.tipo = tipo;
-            LocalDateTime hora = LocalDateTime.now();
-            horaIngreso = hora.getHour();
-            
-        } else {
-            System.out.println("formato de placa inválido");
-        }
-
+    //
+    public Auto(String placa, Tipo tipo, LocalDateTime horaDeIngreso) {
+        this.placa = placa;
+        this.tipo = tipo;
+        LocalDateTime hora = horaDeIngreso;
+        horaIngreso = hora.getHour();
     }
 
-    public void Getinfo() {
+    public Auto(String placa) {
+        this.placa = placa;
+    }
+
+    public void getInfo() {
         System.out.println("Hora de ingreso: " + horaIngreso);
         System.out.println("Tipo de auto: " + tipo);
         System.out.println("Placa: " + placa);
