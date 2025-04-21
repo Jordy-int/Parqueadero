@@ -14,9 +14,10 @@ public class Main {
 
         Parqueadero parqueadero = new Parqueadero();
 
+        // hacer un método dentro del parqueadero que sea para testear.
         for (int i = 0; i < 10; i++) {
             Auto autotest = new Auto("AAA11" + i, Tipo.carro, LocalDateTime.now());
-            parqueadero.registrarIngreso(autotest);
+            parqueadero.autoPredeterminado(autotest);
         }
 
         while (opcion != 5) {
@@ -38,35 +39,7 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-
-                    // Revisar y controlar opctionTipo.
-                    int opcionTipo = 0;
-                    String placa = " ";
-
-                    System.out.println("Ingresa la placa");
-                    try {
-                        placa = scanner.next();
-                        System.out.println("¿Que tipo es?");
-                        System.out.println("Opciones: ");
-                        System.out.println("1. carro 2. Moto");
-                        opcionTipo = scanner.nextInt();
-
-                        if (opcionTipo > 2) {
-                            System.out.println("Opción inválida");
-                            break;
-                        } else {
-                            if (opcionTipo == 1) {
-                                Auto auto = new Auto(placa, Tipo.carro, LocalDateTime.now());
-                                parqueadero.registrarIngreso(auto);
-                            } else {
-                                Auto auto = new Auto(placa, Tipo.moto, LocalDateTime.now());
-                                parqueadero.registrarIngreso(auto);
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println("placa inválida");
-                        break;
-                    }
+                    parqueadero.registrarIngreso();
 
                     break;
                 case 2:
@@ -78,20 +51,8 @@ public class Main {
 
                     break;
                 case 4:
-
-                    // Usar más funciones que lógica en crudo.
-                    String placaSalida = " ";
-
-                    System.out.println("Ingresa la placa");
-                    try {
-                        placaSalida = scanner.next();
-                        Auto autoSalida = new Auto(placaSalida);
-                        parqueadero.registrarSalida(autoSalida);
-                        break;
-                    } catch (Exception e) {
-                        System.out.println(e);
-                        break;
-                    }
+                    parqueadero.registrarSalida();
+                    break;
             }
 
         }

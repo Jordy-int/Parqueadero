@@ -11,7 +11,7 @@ public class Auto {
     private String placa = " ";
     Tipo tipo;
 
-    //
+    
     public Auto(String placa, Tipo tipo, LocalDateTime horaDeIngreso) {
         this.placa = placa;
         this.tipo = tipo;
@@ -19,15 +19,11 @@ public class Auto {
         horaIngreso = hora.getHour();
     }
 
-    public Auto(String placa) {
-        this.placa = placa;
-    }
-
-    public void getInfo() {
-        System.out.println("Hora de ingreso: " + horaIngreso);
-        System.out.println("Tipo de auto: " + tipo);
-        System.out.println("Placa: " + placa);
-    }
+    // public void getInfo() {
+    //     System.out.println("Hora de ingreso: " + horaIngreso);
+    //     System.out.println("Tipo de auto: " + tipo);
+    //     System.out.println("Placa: " + placa);
+    // }
 
     public String getPlaca() {
         return placa;

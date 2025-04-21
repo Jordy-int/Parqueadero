@@ -1,8 +1,11 @@
 package parqueadero;
 
-import modelos.Tipo;
 import auto.Auto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.stream.Stream;
+import modelos.Tipo;
 
 public class Parqueadero {
 
@@ -10,6 +13,7 @@ public class Parqueadero {
     int capacidad = 20;
     int precioCarro = 1000;
     int precioMoto = 2000;
+    Scanner scanner = new Scanner(System.in);
 
     ArrayList<Auto> arrayAutos = new ArrayList<Auto>();
 
@@ -17,65 +21,96 @@ public class Parqueadero {
 
     }
 
-
     //Esta función debe de tener todas las validaciones
-    public void registrarIngreso(Auto auto) {
+    public void registrarIngreso() {
+        int opcionTipo = 0;
 
-        if (auto.getPlaca().matches("^[A-Z]{3}\\d{3}$") && conteoAutos <= capacidad ) {
-            arrayAutos.add(auto);
-            conteoAutos++;
-        }
-        else {
-            System.out.println("formato de placa inválido o No hay más espacio en el parqueadero");
+        String placa = " ";
+
+        System.out.println("Ingresa la placa");
+
+        try {
+            placa = scanner.next();
+            System.out.println("¿Que tipo es?");
+            System.out.println("Opciones: ");
+            System.out.println("1. carro 2. Moto");
+            opcionTipo = scanner.nextInt();
+
+            if (opcionTipo > 2 && opcionTipo <= 0) {
+                System.out.println("Opción inválida");
+
+            } else {
+                if (opcionTipo == 1 && placa.matches("^[A-Z]{3}\\d{3}$") && conteoAutos <= capacidad) {
+                    Auto auto = new Auto(placa, Tipo.carro, LocalDateTime.now());
+                    arrayAutos.add(auto);
+                    conteoAutos++;
+                } else {
+                    if (placa.matches("^[A-Z]{3}\\d{3}$") && conteoAutos <= capacidad) {
+                        Auto auto = new Auto(placa, Tipo.moto, LocalDateTime.now());
+                        arrayAutos.add(auto);
+                        conteoAutos++;
+                    } else {
+                        System.out.println("formato de placa inválido o No hay más espacio en el parqueadero");
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("placa inválida");
+
         }
     }
 
-    public void registrarSalida(Auto auto) {
+    // Verificar la salida puede ir dentro del método registrarSalida
+    public void registrarSalida() {
 
-        boolean existeAuto = false;
-        int autoEncontrado = 0;
+        String placaSalida = " ";
+        // basta con solo el string
 
-        // Mejorar este For con un stream.
-        for (int i = 0; i < arrayAutos.size(); i++) {
+        System.out.println("Ingresa la placa");
+        try {
+            placaSalida = scanner.next();
+            String verificarPlaca = placaSalida;
 
-            if (arrayAutos.get(i).getPlaca().matches(auto.getPlaca())) {
-                existeAuto = true;
-                autoEncontrado = i;
-                System.out.println("auto encontrado");
-                break;
-            }
-        }
+            boolean existeAuto = false;
+            int autoEncontrado = 0;
 
-        if (existeAuto) {
-            arrayAutos.get(autoEncontrado).setSalida();
+            Stream<Auto> stream = arrayAutos.stream();
 
-            if (arrayAutos.get(autoEncontrado).getTipoAuto() == Tipo.carro) {
-                if (arrayAutos.get(autoEncontrado).getMinutosSalida() > 0 && arrayAutos.get(autoEncontrado).getMinutosSalida() <= 59) {
-                    double valorSalida = ((arrayAutos.get(autoEncontrado).getHoraSalida() + 1) - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioCarro;
-                    System.out.println("El valor a pagar es de: " + valorSalida);
+            if (stream.anyMatch(array -> array.getPlaca().equals(verificarPlaca))) {
+                arrayAutos.get(autoEncontrado).setSalida();
+
+                if (arrayAutos.get(autoEncontrado).getTipoAuto() == Tipo.carro) {
+                    if (arrayAutos.get(autoEncontrado).getMinutosSalida() > 0 && arrayAutos.get(autoEncontrado).getMinutosSalida() <= 59) {
+                        double valorSalida = ((arrayAutos.get(autoEncontrado).getHoraSalida() + 1) - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioCarro;
+                        System.out.println("El valor a pagar es de: " + valorSalida);
+                    } else {
+                        double valorSalida = (arrayAutos.get(autoEncontrado).getHoraSalida() - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioCarro;
+                        System.out.println("El valor a pagar es de: " + valorSalida);
+                    }
+
                 } else {
-                    double valorSalida = (arrayAutos.get(autoEncontrado).getHoraSalida() - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioCarro;
-                    System.out.println("El valor a pagar es de: " + valorSalida);
+
+                    if (arrayAutos.get(autoEncontrado).getMinutosSalida() > 0 && arrayAutos.get(autoEncontrado).getMinutosSalida() <= 59) {
+                        double valorSalida = ((arrayAutos.get(autoEncontrado).getHoraSalida() + 1) - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioMoto;
+                        System.out.println("El valor a pagar es de: " + valorSalida);
+                    } else {
+                        double valorSalida = (arrayAutos.get(autoEncontrado).getHoraSalida() - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioMoto;
+                        System.out.println("El valor a pagar es de: " + valorSalida);
+                    }
+
                 }
+
+                arrayAutos.remove(autoEncontrado);
+
+                System.out.println(" El auto ha salido ");
 
             } else {
-
-                if (arrayAutos.get(autoEncontrado).getMinutosSalida() > 0 && arrayAutos.get(autoEncontrado).getMinutosSalida() <= 59) {
-                    double valorSalida = ((arrayAutos.get(autoEncontrado).getHoraSalida() + 1) - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioMoto;
-                    System.out.println("El valor a pagar es de: " + valorSalida);
-                } else {
-                    double valorSalida = (arrayAutos.get(autoEncontrado).getHoraSalida() - arrayAutos.get(autoEncontrado).getHoraSalida()) * precioMoto;
-                    System.out.println("El valor a pagar es de: " + valorSalida);
-                }
-
+                System.out.println(" El auto no existe");
             }
 
-            arrayAutos.remove(autoEncontrado);
-            
-            System.out.println(" El auto ha salido ");
-
-        } else {
-            System.out.println(" El auto no existe");
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
     }
@@ -93,5 +128,9 @@ public class Parqueadero {
     public void capacidad() {
         System.out.println("capacidad es de: " + capacidad);
         System.out.println("Capacidad restante es de: " + (capacidad - arrayAutos.size()));
+    }
+
+    public void autoPredeterminado(Auto auto) {
+        arrayAutos.add(auto);
     }
 }
